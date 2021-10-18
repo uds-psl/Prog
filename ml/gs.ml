@@ -1,10 +1,7 @@
 let a = 2 * 3 + 2
 let b = 5 * a
-
-let a = 2 * 3 + 2
-let b = 5 * a
 let a = 5
-let c = 2 * a
+let c = a + b
 
 let square x = x * x
 
@@ -37,9 +34,6 @@ let rec digit_sum x =
   if x < 10 then x 
   else digit_sum (x / 10) + (x mod 10)
 
-let rec my_div x y = if x < y then 0 else 1 + my_div (x - y) y
-let rec my_mod x y = if x < y then x else my_mod (x - y) y
-
 let rec rev' x a = 
   if x <= 0 then a
   else rev' (x / 10) (10 * a + x mod 10)
@@ -48,10 +42,9 @@ let rev x = rev' x 0
 let rec gcd x y =
   if y < 1 then x
   else gcd y (x mod y)
-      
-let rec pow x n =
-  if n < 1 then 1
-  else x * pow x (n - 1)
+
+let rec my_div x y = if x < y then 0 else 1 + my_div (x - y) y
+let rec my_mod x y = if x < y then x else my_mod (x - y) y
 
 let rec sqrt' k n =
   if n < square (k + 1) then k
@@ -85,10 +78,6 @@ let hms x =
   let m = (x mod 3600) / 60 in
   let s = x mod 60 in
   (h,m,s)
-
-let rec fac' a n =
-  if n < 1 then a
-  else fac' (n*a) (n-1)
 
 let rec my_mod x y =
   if x < y then x
