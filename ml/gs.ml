@@ -79,13 +79,5 @@ let hms x =
   let s = x mod 60 in
   (h,m,s)
 
-let rec my_mod x y =
-  if x < y then x
-  else my_mod (x - y) y
-
-let my_mod_checked x y =
-  if x >=0 && y > 0 then my_mod x y
-  else invalid_arg "my_mod_checked"
-
 let add = (+)
 let layz_or = (||)
