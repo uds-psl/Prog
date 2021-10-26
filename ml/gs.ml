@@ -45,28 +45,28 @@ let rec gcd x y =
 
 let rec my_div x y = if x < y then 0 else 1 + my_div (x - y) y
 let rec my_mod x y = if x < y then x else my_mod (x - y) y
-
-let rec sqrt' k n =
-  if n < square (k + 1) then k
-  else sqrt' (k + 1) n
-let sqrt n = sqrt' 0 n
     
 let rec first f k =
   if f k then k
   else first f (k + 1)
+
+let div x y = first (fun k -> x < (k + 1) * y) 0
+let sqrt x = first (fun k -> x < pow (k + 1) 2) 0
+let curt x = first (fun k -> x < pow (k + 1) 3) 0
+let root n x = first (fun k -> x < pow (k + 1) n) 0
 
 let test n k = n < square (k + 1)
 let sqrt n = first (test n) 0
 
 let sqrt n = first (fun k -> n < square (k + 1)) 0
 
-let curt n = first (fun k -> n < pow (k + 1) 3) 0
-
-let div x y = first (fun k -> x < (k + 1) * y) 0
-
 let test = fun n k -> n < (k + 1) * (k + 1)
-
 let test = fun n -> (fun k -> n < (k + 1) * (k + 1))
+
+let rec sqrt' k n =
+  if n < square (k + 1) then k
+  else sqrt' (k + 1) n
+let sqrt n = sqrt' 0 n
 
 let rec pow' x n a =
   if n < 1 then a
@@ -79,13 +79,10 @@ let hms x =
   let s = x mod 60 in
   (h,m,s)
 
-let rec my_mod x y =
-  if x < y then x
-  else my_mod (x - y) y
-
-let my_mod_checked x y =
-  if x >=0 && y > 0 then my_mod x y
-  else invalid_arg "my_mod_checked"
+let rec rem x y = if x < y then x else rem (x - y) y
+let rem_checked x y =
+  if x >=0 && y > 0 then rem x y
+  else invalid_arg "rem_checked"
 
 let add = (+)
-let layz_or = (||)
+let eager_or = (||)
