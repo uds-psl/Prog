@@ -12,9 +12,13 @@ let add x y = iter succ y x
 let mul x y = iter (add y) x 0
 let pow x y = iter (mul x) y 1
 
+let rec fib n = if n < 2 then n else fib (n - 2) + fib (n - 1)
+
 let pred n = fst (iter (fun (x,y) -> (y, y + 1)) n (0,0)) 
-let fib n  = fst (iter (fun (a,b) -> (b, a + b)) n (0,1))
+let fib' n  = fst (iter (fun (a,b) -> (b, a + b)) n (0,1))
 let fac n  = snd (iter (fun (n,a) -> (n + 1, (n + 1) * a)) n (0,1))
+
+(* fib' is faster than fib, check for 42 *)
 
 let rec forall m n f : bool =
   m > n || f m && forall (m + 1) n f
