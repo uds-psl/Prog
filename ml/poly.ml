@@ -38,7 +38,7 @@ let prime' x = x > 1 &&
                in k * k > x
 
 let test  = prime' 479001599
-let test  = prime 479001599    (* slower *)
+(* let test  = prime 479001599    (* slower *) *)
 
 (* 
 Prime too large for TryOcaml but ok for OCaml interpreter on 64 bit machine
