@@ -41,7 +41,9 @@ let test  = prime' 479001599
 (* let test  = prime 479001599    (* slower *) *)
 
 (* 
-Prime too large for TryOcaml but ok for OCaml interpreter on 64 bit machine
+The prime number 87178291199 is too large for TryOcaml 
+but ok for a stand alone OCaml interpreter on a 64 bit machine.
+The difference is execution time between prime' and prime is drastic.
 let test  = prime' 87178291199
 let test  = prime 87178291199
 *)
