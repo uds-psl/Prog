@@ -41,6 +41,11 @@ let rec count x l =
   | [] -> 0
   | y :: l -> if x = y then 1 + count x l else count x l
 
+let rec exists p l =
+   match l with
+  | [] -> false
+  | x :: l -> p x || exists p l
+ 
 let hd l =
   match l with
   | [] -> failwith "hd"
