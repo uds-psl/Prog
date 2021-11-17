@@ -105,6 +105,19 @@ let test l =
               | [] -> false
               | y :: _ -> y = 2
 
+(* Fold *)
+
+let rec fold f l b =
+  match l with
+  | [] -> b
+  | a :: l -> f a (fold f l b)
+ 
+let rec fold_left f l b =
+  match l with
+  | [] -> b
+  | a :: l -> fold f l (f a b)
+                          
+
 (* Insertion sort *)
                           
 let rec insert x l =
@@ -123,7 +136,7 @@ let gisort p l =
     | [] -> [x]
     | y :: l -> if p x y then x :: y :: l else y :: insert x l
   in
-  List.fold_right insert l []
+  fold_left insert l []
 
 let test = gisort (<=) [5;3;2;2;4]
 let test = gisort (>=) [5;3;2;2;4]
