@@ -57,9 +57,15 @@ let tl l =
   | _ :: l -> l
 
 let rec nth l n =
+  if n < 0 then invalid_arg "inv"
+  else match l with
+    | [] -> failwith "nth"
+    | x :: l -> if n = 0 then x else nth l (n-1)
+
+let rec nth_opt l n =
   match l with
-  | [] -> failwith "nth"
-  | x :: l -> if n < 1 then x else nth l (n-1)
+  | [] -> None
+  | x :: l -> if n < 1 then Some x else nth_opt l (n-1)
 
 let rec filter p  l =
   match l with
@@ -164,12 +170,12 @@ let rec pow l =
   | [] -> [[]]
   | x :: l -> pow l @ List.map (fun l -> x :: l) (pow l)
 
-let rec pow l k =
+let rec gpow l k =
   if k < 1 then [[]]
   else
     match l with
     | [] -> []
-    | x :: l -> pow l k @ List.map (fun l -> x :: l) (pow l (k-1))
+    | x :: l -> gpow l k @ List.map (List.cons x) (gpow l (k-1))
 
 let rec is_sublist l1 l2 =
   match l1, l2 with
@@ -229,15 +235,15 @@ let rec update (l: ('a,'b) env)  a b : ('a,'b) env =
 
 let test = update (update (update (update [] "x" 3) "y" 7) "z" 2) "y" 13
 
-let rec lookup' l a =
+let rec lookup_opt l a =
   match l with
   | [] -> None
-  | (a',b) :: l -> if a = a' then Some b else lookup' l a
+  | (a',b) :: l -> if a = a' then Some b else lookup_opt l a
 
 let test = lookup' [("x",3); ("y",7); ("z",2)] "y"
 
 let bound l a =
-  match lookup' l a with
+  match lookup_opt l a with
   | Some _ -> true
   | None -> false
 
