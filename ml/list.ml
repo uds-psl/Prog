@@ -118,12 +118,18 @@ let rec fold f l b =
   | [] -> b
   | a :: l -> f a (fold f l b)
  
-let rec fold_left f l b =
+let rec foldl f l b =
   match l with
   | [] -> b
-  | a :: l -> fold f l (f a b)
-                          
+  | a :: l -> foldl f l (f a b)
 
+let test_rev l = rev l = foldl cons l []
+let test = test_rev [1;2;3;4]
+
+let fold_app l1 = fold cons l1
+let test_rev l = rev l = fold (fun a b -> fold_app b [a]) l []
+let test = test_rev [1;2;3;4]
+                          
 (* Insertion sort *)
                           
 let rec insert x l =
@@ -142,7 +148,7 @@ let gisort p l =
     | [] -> [x]
     | y :: l -> if p x y then x :: y :: l else y :: insert x l
   in
-  fold_left insert l []
+  foldl insert l []
 
 let test = gisort (<=) [5;3;2;2;4]
 let test = gisort (>=) [5;3;2;2;4]
@@ -240,7 +246,7 @@ let rec lookup_opt l a =
   | [] -> None
   | (a',b) :: l -> if a = a' then Some b else lookup_opt l a
 
-let test = lookup' [("x",3); ("y",7); ("z",2)] "y"
+let test = lookup_opt [("x",3); ("y",7); ("z",2)] "y"
 
 let bound l a =
   match lookup_opt l a with
