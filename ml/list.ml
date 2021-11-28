@@ -216,14 +216,14 @@ let test = prime_fac' 2 735
 let test = prime_fac' 2 479001599
 (* let test = prime_fac' 2 87178291199 (* Too large for Try OCaml *) *)
 
-(* Environments *)
+(* Maps *)
 
-type ('a,'b) env = ('a * 'b) list
+type ('a,'b) map = ('a * 'b) list
 
 let rec lookup l a =
   match l with
-  | [] -> invalid_arg "lookup"
-  | (a',b) :: l -> if a = a' then b else lookup l a
+  | [] -> None
+  | (a',b) :: l -> if a = a' then Some b else lookup l a
 
 let test = lookup [("x",3); ("y",7); ("z",2)] "y"
 
@@ -233,23 +233,12 @@ let rec update l a b =
   | (a',b') :: l -> if a = a' then (a,b) :: l
     else (a',b') :: update l a b
 
-let rec update (l: ('a,'b) env)  a b : ('a,'b) env =
-  match l with
-  | [] -> [(a,b)]
-  | (a',b') :: l -> if a = a' then (a,b) :: l
-    else (a',b') :: update l a b
-
 let test = update (update (update (update [] "x" 3) "y" 7) "z" 2) "y" 13
 
-let rec lookup_opt l a =
-  match l with
-  | [] -> None
-  | (a',b) :: l -> if a = a' then Some b else lookup_opt l a
-
-let test = lookup_opt [("x",3); ("y",7); ("z",2)] "y"
-
+(* let rec update (l: ('a,'b) map)  a b : ('a,'b) map = *)
+    
 let bound l a =
-  match lookup_opt l a with
+  match lookup l a with
   | Some _ -> true
   | None -> false
 
