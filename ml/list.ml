@@ -75,7 +75,7 @@ let rec filter p  l =
 let rec eq (p: 'a -> 'a -> bool) l1 l2 =
   match l1, l2 with
   | [], [] -> true
-  | x::l1, y::l2 -> p x y || eq p l1 l2
+  | x::l1, y::l2 -> p x y && eq p l1 l2
   | _, _ -> false
 
 let rec eq (p: 'a -> 'a -> bool) l1 l2 =
