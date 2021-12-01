@@ -204,7 +204,12 @@ let rec prime_fac x =
 
 let test = prime_fac 735
 (* let test = prime_fac 479001599 (* slow *) *)
-    
+
+let rec prime_fac x =
+  if x < 2 then []
+  else let k = first (fun k -> x mod k = 0) 2 in
+    k :: prime_fac (x / k)
+
 let rec prime_fac' k x =
   if k * k > x then [x]
   else if x mod k = 0 then k :: prime_fac' k (x / k)

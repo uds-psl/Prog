@@ -25,6 +25,9 @@ let rec mirror t =
 
 let test = mirror t
 
+
+(* Balanced trees *)
+    
 let rec balanced t =
   match t with
   | A -> Some 0
@@ -81,15 +84,28 @@ let rec tree t =
 
 type ctree = A | B of ctree * ctree | C of ctree * ctree
 
+let rec ctree t = match t with
+  | C(t1,t2) -> btree t1 ^ "C" ^ ctree t2
+  | t -> btree t
+and btree t = match t with
+  | B(t1,t2) -> btree t1 ^ "B" ^ ptree t2
+  | t -> ptree t
+and ptree t = match t with
+  | A -> "A"
+  | t -> "(" ^ ctree t ^ ")"
+
+let t = C(C(A,A), C(B(A,A), A))
+let test = ctree t
+
 (* Abstract expressions *)
 
 type var = string
 type op  = Add | Sub | Mul
-type exp = Var of var | Con of int
+type exp = Var of var | Con of int| False | True 
          | Oapp of op * exp * exp | Fapp of exp * exp
-         | False | True | If of exp * exp *exp
-         | Let of var * exp * exp
+         | If of exp * exp *exp
          | Lam of var * exp
+         | Let of var * exp * exp
          | Letrec of var * var * exp * exp
 
 let int2string x =
