@@ -100,9 +100,11 @@ let test = ctree t
 (* Abstract expressions *)
 
 type var = string
+type con = Bcon of bool | Icon of int
 type op  = Add | Sub | Mul
-type exp = Var of var | Con of int| False | True 
-         | Oapp of op * exp * exp | Fapp of exp * exp
+type exp = Var of var | Con of con
+         | Oapp of op * exp * exp
+         | Fapp of exp * exp
          | If of exp * exp *exp
          | Lam of var * exp
          | Let of var * exp * exp
