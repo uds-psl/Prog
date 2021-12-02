@@ -85,7 +85,7 @@ let rec tree t =
 type ctree = A | B of ctree * ctree | C of ctree * ctree
 
 let rec ctree t = match t with
-  | C(t1,t2) -> btree t1 ^ "C" ^ ctree t2
+  | C(t1,t2) -> ctree t1 ^ "C" ^ btree t2
   | t -> btree t
 and btree t = match t with
   | B(t1,t2) -> btree t1 ^ "B" ^ ptree t2
