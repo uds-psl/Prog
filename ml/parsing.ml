@@ -19,6 +19,15 @@ let lex s =
 
 let test = lex " ABA C (ABA) "
 
+let explode s = List.init (String.length s) (String.get s)
+let implode l = List.fold_right (fun c s -> String.make 1 c ^ s) l ""
+
+let test = explode "Saarbrücken"
+let test = implode (explode "Saarbrücken")
+
+let test = List.map Char.code (explode "Saarbrücken")
+let test = Char.chr (Char.code 'a')
+
 (* Recursive Descent Parsing *)
 
 let rec tree l =  match l with
@@ -119,9 +128,22 @@ let test = tree (lex "ACAA(AA)CAAAA")
 let test = tree (lex "ACAA(AA)BCAAAA")
 let test = tree (lex "AAA(AA)(A(AA)A)")
 
+(* Postfix parsing *)
+
+let rec depost l1 l2 = match l1, l2 with
+  | [], l2 -> Some l2
+  | AT::l1, l2 -> depost l1 (A::l2)
+  | BT::l1, t2::t1::l2 -> depost l1 (B(t1,t2)::l2)
+  | CT::l1, t2::t1::l2 -> depost l1 (C(t1,t2)::l2)
+  | _, _ -> None
+
+let test = depost (lex "AABABAABBAC") []
+
 (* Mini-Ocaml *)
 
 type con   = Bcon of bool | Icon of int
-type token = Add | Sub | Mul | LP | RP | Eq | Leq | Arr
+type tok   = Add | Sub | Mul | LP | RP | Eq | Leq | Arr
            | If | Then | Else | Lam | Let | Letrec | In
            | Con of con | Var of string
+
+let num c = Char.code c - Char.code '0'
