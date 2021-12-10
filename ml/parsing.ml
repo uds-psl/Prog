@@ -146,4 +146,8 @@ type tok   = Add | Sub | Mul | LP | RP | Eq | Leq | Arr
            | If | Then | Else | Lam | Let | Letrec | In
            | Con of con | Var of string
 
-let num c = Char.code c - Char.code '0'
+let code = Char.code
+let num c = code c - code '0'
+let is_num c = code '0' <= code c && code c <= code '9'
+let is_lc_letter c = code 'a' <= code c && code c <= code 'z'
+let is_uc_letter c = code 'A' <= code c && code c <= code 'Z'
