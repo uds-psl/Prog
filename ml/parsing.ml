@@ -131,11 +131,11 @@ let test = tree (lex "AAA(AA)(A(AA)A)")
 (* Postfix parsing *)
 
 let rec depost l1 l2 = match l1, l2 with
-  | [], l2 -> Some l2
+  | [], l2 -> l2
   | AT::l1, l2 -> depost l1 (A::l2)
   | BT::l1, t2::t1::l2 -> depost l1 (B(t1,t2)::l2)
   | CT::l1, t2::t1::l2 -> depost l1 (C(t1,t2)::l2)
-  | _, _ -> None
+  | _, _ -> []
 
 let test = depost (lex "AABABAABBAC") []
 
