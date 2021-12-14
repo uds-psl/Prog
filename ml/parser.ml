@@ -44,10 +44,11 @@ let lex s : token list =
   and lex_num' i n l = lex i (CON (ICON n)::l)
   and lex_id i n l =
     if exhausted i then lex_id' i n l
-    else let c = get i in
-      if lc_letter c || uc_letter c || digit c
-      then lex_id (i+1) (n+1) l
-      else lex_id' i n l
+    else match get i with
+      | '\'' | '_' -> lex_id (i+1) (n+1) l
+      | c -> if lc_letter c || uc_letter c || digit c
+        then lex_id (i+1) (n+1) l
+        else lex_id' i n l
   and lex_id' i n l = match getstr i n with
     | "if" -> lex i (IF::l)
     | "then" -> lex i (THEN::l)
