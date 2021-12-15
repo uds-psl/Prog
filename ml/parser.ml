@@ -66,7 +66,7 @@ let fac_string =
     if n <= 1 then a else fac (n*a) (n-1) 
    in fac 1 5"
 
-let fac_tokens = lex fac_string
+let test = lex fac_string
 
 type var = string
 type con = Bcon of bool | Icon of int

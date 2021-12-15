@@ -57,3 +57,11 @@ let test = eval empty
                       Fapp (Fapp (Var "fac", Oapp (Mul, Var "n", Var "a")),
                             Oapp (Sub, Var "n", Con (Icon 1))))),
              Fapp (Fapp (Var "fac", Con (Icon 1)), Con (Icon 4))))
+
+let test = eval empty
+    (Letrec ("fac", "a",
+             Lam ("n",
+                  If (Oapp (Leq, Var "n", Con (Icon 1)), Var "a",
+                      Fapp (Fapp (Var "fac", Oapp (Mul, Var "n", Var "a")),
+                            Oapp (Sub, Var "n", Con (Icon 1))))),
+             Fapp (Var "fac", Con (Icon 1))))
