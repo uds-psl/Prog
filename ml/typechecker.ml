@@ -1,4 +1,4 @@
-type ty = Bool | Int | Arrow of ty * ty
+type ty = Int | Bool | Arrow of ty * ty
 type var = string
 type con = Bcon of bool | Icon of int
 type op  = Add | Sub | Mul | Leq
@@ -10,14 +10,7 @@ type exp = Var of var | Con of con
          | Let of var * exp * exp
          | Letrec of var * var * ty * ty * exp * exp
 
-type ('a,'b) env = (' a * 'b) list
-let empty : ('a,'b) env = []
-let update (env : ('a,'b) env) a b : ('a,'b) env = (a,b) :: env
-let rec lookup (env : ('a,'b) env) a =  match env with
-  | (a',b) :: env -> if a = a' then Some b else lookup env a
-  | [] -> None
-    
-let check_op o t1 t2 : ty = match o, t1, t2 with
+ let check_op o t1 t2 : ty = match o, t1, t2 with
   | Add, Int, Int -> Int
   | Sub, Int, Int -> Int
   | Mul, Int, Int -> Int
@@ -28,6 +21,13 @@ let check_fun t1 t2 : ty = match t1 with
   | Arrow (t11,t12) -> if t11 = t2 then t12
     else failwith "fun app: wrong argument type"
   | _ -> failwith "fun app: function expected"
+
+type ('a,'b) env = ('a * 'b) list
+let empty : ('a,'b) env = []
+let update (env : ('a,'b) env) a b : ('a,'b) env = (a,b) :: env
+let rec lookup (env : ('a,'b) env) a =  match env with
+  | (a',b) :: env -> if a = a' then Some b else lookup env a
+  | [] -> None
                               
 let rec check env e : ty = match e with
   | Var x ->
@@ -35,7 +35,7 @@ let rec check env e : ty = match e with
       | Some t -> t
       | None -> failwith ("variable" ^ x ^ "unbound")
     end
-  | Con (Bcon b)  -> Bool
+  | Con (Bcon b) -> Bool
   | Con (Icon n) -> Int
   | Oapp (o,e1,e2) -> check_op o (check env e1) (check env e2)
   | Fapp (e1,e2) -> check_fun (check env e1) (check env e2)

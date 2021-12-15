@@ -9,7 +9,7 @@ type exp = Var of var | Con of con
          | Let of var * exp * exp
          | Letrec of var * var * exp * exp
 
-type ('a,'b) env = (' a * 'b) list
+type ('a,'b) env = ('a * 'b) list
 let empty : ('a,'b) env = []
 let update (env : ('a,'b) env) a b : ('a,'b) env = (a,b) :: env
 let rec lookup (env : ('a,'b) env) a =  match env with
