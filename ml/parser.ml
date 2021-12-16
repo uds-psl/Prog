@@ -1,7 +1,7 @@
 type const   = BCON of bool | ICON of int
 type token   = ADD | SUB | MUL | LP | RP | EQ | LEQ | ARR
              | IF | THEN | ELSE | LAM | LET | IN | REC
-             | CON of const | VAR of string
+             | CON of const | VAR of string | BOOL | INT
 
 let code = Char.code
 let num c = code c - code '0'

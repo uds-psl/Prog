@@ -1,4 +1,4 @@
-type ty = Int- | Bool | Arrow of ty * ty
+type ty = Int | Bool | Arrow of ty * ty
 type var = string
 type con = Bcon of bool | Icon of int
 type op  = Add | Sub | Mul | Leq
@@ -6,9 +6,9 @@ type exp = Var of var | Con of con
          | Oapp of op * exp * exp
          | Fapp of exp * exp
          | If of exp * exp * exp
-         | Lam of var * ty * exp
+         | Lamty of var * ty * exp
          | Let of var * exp * exp
-         | Letrec of var * var * ty * ty * exp * exp
+         | Letrecty of var * var * ty * ty * exp * exp
 
  let check_op o t1 t2 : ty = match o, t1, t2 with
   | Add, Int, Int -> Int
@@ -45,17 +45,17 @@ let rec check env e : ty = match e with
         else failwith "If: then and else type not equal"
       | _, _, _  -> failwith "if: bool expected"
     end
-  | Lam (x,t,e) -> Arrow (t, check (update env x t) e)
+  | Lamty (x,t,e) -> Arrow (t, check (update env x t) e)
   | Let (x,e1,e2) -> check (update env x (check env e1)) e2
-  | Letrec (f,x,t1,t2,e1,e2) ->
+  | Letrecty (f,x,t1,t2,e1,e2) ->
     let env1 = update env f (Arrow(t1,t2)) in
     if check (update env1 x t1) e1 = t2 then check env1 e2
     else failwith "let rec: declared type not matched"
 
 let test = check empty
-    (Letrec ("fac", "a", Int, Arrow(Int,Int), 
-             Lam ("n", Int,
-                  If (Oapp (Leq, Var "n", Con (Icon 1)), Var "a",
-                      Fapp (Fapp (Var "fac", Oapp (Mul, Var "n", Var "a")),
-                            Oapp (Sub, Var "n", Con (Icon 1))))),
-             Fapp (Fapp (Var "fac", Con (Icon 1)), Con (Icon 4))))
+    (Letrecty ("fac", "a", Int, Arrow(Int,Int), 
+               Lamty ("n", Int,
+                      If (Oapp (Leq, Var "n", Con (Icon 1)), Var "a",
+                          Fapp (Fapp (Var "fac", Oapp (Mul, Var "n", Var "a")),
+                                Oapp (Sub, Var "n", Con (Icon 1))))),
+               Fapp (Fapp (Var "fac", Con (Icon 1)), Con (Icon 4))))
