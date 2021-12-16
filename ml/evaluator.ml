@@ -33,7 +33,7 @@ let rec eval env e : value = match e with
       | Some v -> v
       | None -> failwith ("variable" ^ x ^ "unbound")
     end
-  | Con (Bcon b)  -> Bval b
+  | Con (Bcon b) -> Bval b
   | Con (Icon n) -> Ival n
   | Oapp (o,e1,e2) -> eval_op o (eval env e1) (eval env e2)
   | Fapp (e1,e2) -> eval_fun (eval env e1) (eval env e2)
