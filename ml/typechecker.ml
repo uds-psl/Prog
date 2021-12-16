@@ -1,4 +1,4 @@
-type ty = Int | Bool | Arrow of ty * ty
+type ty  = Int | Bool | Arrow of ty * ty
 type var = string
 type con = Bcon of bool | Icon of int
 type op  = Add | Sub | Mul | Leq
