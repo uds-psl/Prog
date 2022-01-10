@@ -3,14 +3,14 @@ type token   = ADD | SUB | MUL | LP | RP | EQ | LEQ | ARR
              | IF | THEN | ELSE | LAM | LET | IN | REC
              | CON of const | VAR of string | BOOL | INT
 
-let code = Char.code
-let num c = code c - code '0'
-let digit c = code '0' <= code c && code c <= code '9'
-let lc_letter c = code 'a' <= code c && code c <= code 'z'
-let uc_letter c = code 'A' <= code c && code c <= code 'Z'
+let num c = Char.code c - Char.code '0'
+let digit c = '0' <= c && c <= '9'
+let lc_letter c = 'a' <= c && c <= 'z'
+let uc_letter c = 'A' <= c && c <= 'Z'
 let whitespace c = match c with
-  | ' ' | '\n' |  '\t' -> true
+  | ' ' | '\n' |  '\t' | '\r' -> true
   | _ -> false
+(* new line is "\r\n" under Windows *)
 
 let lex s : token list =
   let get i = String.get s i in
@@ -111,7 +111,7 @@ and sexp' e1 l = match l with
   | l -> (e1,l)
 and mexp l = let (e,l) = aexp l in mexp' e l
 and mexp' e1 l = match l with
-  | MUL::l -> let (e2,l) = aexp l in aexp' (Oapp(Mul,e1,e2)) l
+  | MUL::l -> let (e2,l) = aexp l in mexp' (Oapp(Mul,e1,e2)) l
   | l -> (e1,l)
 and aexp l = let (e,l) = pexp l in aexp' e l
 and aexp' e1 l = match l with
@@ -126,3 +126,5 @@ and pexp l = match l with
   |  _ -> failwith "pexp"
 
 let test = exp (lex fac_string)
+let test = exp (lex "1+2+3")
+let test = exp (lex "1if")
