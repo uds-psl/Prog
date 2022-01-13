@@ -33,7 +33,7 @@ let rec check env e : ty = match e with
   | Var x ->
     begin match lookup env x with
       | Some t -> t
-      | None -> failwith ("variable" ^ x ^ "unbound")
+      | None -> failwith ("variable " ^ x ^ " unbound")
     end
   | Con (Bcon b) -> Bool
   | Con (Icon n) -> Int
