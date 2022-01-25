@@ -97,13 +97,13 @@ let ssort a : unit =
 let qsort a =
   let partition l r =
     let x = a.(r) in
-    let rec part i j =
+    let rec loop i j =
       if i > j
       then (swap a i r; i)
-      else if a.(i) < x then part (i+1) j
-      else if a.(j) >= x then part i (j-1)
-      else (swap a i j; part (i+1) (j-1))
-    in part l (r-1)   
+      else if a.(i) < x then loop (i+1) j
+      else if a.(j) >= x then loop i (j-1)
+      else (swap a i j; loop (i+1) (j-1))
+    in loop l (r-1)   
   in let rec qsort' l r =
     if l >= r then ()
     else let m = partition l r in
@@ -115,5 +115,14 @@ let a = [|3;2;1|]
 let test = (qsort a; a)
 let a = Array.init 1000 (fun k -> -k)
 let test = (qsort a; a)
+
+(* Equality *)
+
+let a = Array.make 2 1
+let b = Array.make 2 1
+let test2 = (a = b)               (* true *)
+let test1 = (a == b)              (* false *)
+let test3 = (a.(1) <- 2; a=b)     (* false *)
+let test4 = (a.(1) <- 1; a=b)     (* true *)
 
 (* Heap *)
