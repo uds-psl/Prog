@@ -125,4 +125,31 @@ let test1 = (a == b)              (* false *)
 let test3 = (a.(1) <- 2; a=b)     (* false *)
 let test4 = (a.(1) <- 1; a=b)     (* true *)
 
-(* Heap *)
+(* Order *)
+
+let test = invalid_arg "1"  + invalid_arg "2"
+let test = (invalid_arg "1", invalid_arg "2")
+let test = (invalid_arg "1"; invalid_arg "2")
+
+(* Reference cells *)
+
+let c = ref 0
+let next () = (c := !c + 1; !c)
+let test1 = next ()
+let test2 = next ()
+let test3 = (next (), next ())
+let test4 = next () + next () + next ()
+
+let next = let c = ref 0 in
+  fun () -> (c := !c + 1; !c)
+let test1 = next ()
+let test2 = next ()
+let test3 = (next (), next ())
+let test4 = next () + next () + next ()
+
+let nextSquare = let c = ref 0 in
+  fun () -> let n = !c in c:= n+1 ; n*n
+let test0 = nextSquare ()
+let test1 = nextSquare ()
+let test2 = nextSquare ()
+let test3 = nextSquare ()
