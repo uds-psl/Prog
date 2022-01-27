@@ -36,7 +36,7 @@ let b = clone a
 let test = a = clone a
 let test = Array.make 3 1 = Array.make 4 1
 
-(* binary search *)
+(* Binary search *)
 
 type comparison = LE | EQ | GR
 let comp x y : comparison =
@@ -75,18 +75,18 @@ let test = (reverse a; a)
 
 let min a : int =
   let r = Array.length a - 1 in
-  let rec loop i j =
-    if i > r then j
-    else if a.(i) < a.(j) then loop (i+1) i
-    else loop (i+1) j
+  let rec loop k j =
+    if k >= r then j
+    else if a.(k+1) < a.(j) then loop (k+1) (k+1)
+    else loop (k+1) j
   in loop 0 0
 
 let ssort a : unit =
   let r = Array.length a - 1 in
-  let rec min i j : int =
-    if i > r then j
-    else if a.(i) < a.(j) then min (i+1) i
-    else min (i+1) j
+  let rec min k j : int =
+    if k >= r then j
+    else if a.(k+1) < a.(j) then min (k+1) (k+1)
+    else min (k+1) j
   in let rec loop i : unit =
        if i >= r then ()
        else (swap a (min i i) i; loop (i+1))
