@@ -96,6 +96,7 @@ let ssort a : unit =
 
 let qsort a =
   let partition l r =
+    swap a ((l + r) / 2) r;
     let x = a.(r) in
     let rec loop i j =
       if i > j
@@ -111,9 +112,36 @@ let qsort a =
   in qsort' 0 (Array.length a - 1)
 
 let a = [|3;5;7;2;11;23;13;2;17;19;23|]
-let a = [|3;2;1|]
 let test = (qsort a; a)
-let a = Array.init 1000 (fun k -> -k)
+let a = Array.init 100000 (fun k -> -k)
+let test = (qsort a; a)
+
+let ensure_median a l r =
+  let m = (l + r) / 2 in
+  let (x,y,z) = (a.(l), a.(m), a.(r)) in
+  if x <= z && z <= y || y <= z && z <= x then ()
+  else if x <= y && y <= z || z <= y && y <= x then swap a m r
+  else swap a l r
+
+let partition a l r =
+  ensure_median a l r;
+  let x = a.(r) in
+  let rec loop i j =
+    if i > j
+    then (swap a i r; i)
+    else if a.(i) < x then loop (i+1) j
+    else if a.(j) >= x then loop i (j-1)
+    else (swap a i j; loop (i+1) (j-1))
+  in loop l (r-1)
+    
+let qsort a =
+  let rec qsort' l r =
+    if l >= r then ()
+    else let m = partition a l r in
+      qsort' l (m-1); qsort' (m+1) r
+  in qsort' 0 (Array.length a - 1)
+
+let a = Array.init 10000 (fun k -> -k)
 let test = (qsort a; a)
 
 (* Equality *)
