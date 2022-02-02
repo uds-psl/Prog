@@ -50,7 +50,7 @@ let s = Stack.make 3
 let test1 = Stack.top s
 let test2 = Stack.push s 7; Stack.top s
 let test3 = Stack.height s
-let test4 = Stack.pop s; Stack.pop s; Stack.pop s; Stack.pop s
+let test4 = Stack.pop s; Stack.pop s; Stack.pop
 
 (* Queues *)
 
@@ -171,3 +171,23 @@ let rec getlist a =
   else  H.get a 0 :: getlist (H.get a 1)
 
 let test = getlist (putlist [2;3;-1;4])
+
+(* AB Trees *)
+
+type tree = A | B of tree * tree
+
+let rec puttree t = match t with
+  | A -> -1
+  | B(t1,t2) -> alloc' [puttree t1; puttree t2]
+
+let rec gettree a =
+  if a = -1 then A
+  else B(gettree (H.get a 0), gettree (H.get a 1))
+
+let test = gettree (puttree (B(B(A,A),A)))
+
+let rec putMtree n =
+  if n < 1 then -1
+  else let a = putMtree (n-1) in alloc' [a;a]
+
+let test = gettree (putMtree 2)
