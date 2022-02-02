@@ -77,7 +77,7 @@ module Queue : QUEUE = struct
   let length q = List.length (!q)
 end
 
-(* Bounded Stack  *)
+(* Array-based stacks  *)
 
 module type BSTACK = sig
   val empty : unit -> bool
@@ -100,7 +100,7 @@ module S : BSTACK = struct
   let top () = if empty() then raise Empty else a.(!h -1)
 end
 
-(* Queues *)
+(* Array-based queues *)
 
 module type BQUEUE = sig
   val empty  : unit -> bool
@@ -111,15 +111,15 @@ module type BQUEUE = sig
 end
 
 module Q : BQUEUE = struct
-  let maxSize = 3
-  let a = Array.make maxSize 0
-  let s = ref 0
-  let l = ref 0
+  let size = 3
+  let a = Array.make size 0
+  let s = ref 0  (* position of first entry *)
+  let l = ref 0  (* number of entries *)
   exception Empty
   exception Full
   let empty () = !l = 0
-  let full () = !l = maxSize
-  let pos x = x mod maxSize
+  let full () = !l = size
+  let pos x = x mod size
   let insert x = if full() then raise Full
     else (a.(pos(!s + !l)) <- x; l:= !l + 1)
   let remove () = if empty() then raise Empty
@@ -130,8 +130,6 @@ end
 (* Heap *)
 
 module type HEAP = sig
-  exception Address
-  exception Full
   type address = int
   type index = int
   val alloc   : int -> address
@@ -140,7 +138,7 @@ module type HEAP = sig
   val release : address -> unit
 end
 
-(*module H : HEAP = struct*)
+module H : HEAP = struct
   let maxSize = 1000
   let h = Array.make maxSize (-1)
   let s = ref 0  (* size of heap *)
@@ -155,14 +153,13 @@ end
   let get a i = h.(check(a+i))
   let set a i x = h.(check(a+i)) <-x
   let release a = s := check a
-(*end
-open H*)
+end
 
 let alloc' l =
-  let a = alloc (List.length l) in
+  let a = H.alloc (List.length l) in
   let rec loop l i = match l with
     | [] -> a
-    | x::l -> h.(a+i) <- x; loop l (i+1)
+    | x::l -> H.set a i x; loop l (i+1)
   in loop l 0
 
 let rec putlist l = match l with
@@ -171,6 +168,6 @@ let rec putlist l = match l with
 
 let rec getlist a =
   if a = -1 then [] 
-  else  get a 0 :: getlist (get a 1)
+  else  H.get a 0 :: getlist (H.get a 1)
 
 let test = getlist (putlist [2;3;-1;4])
