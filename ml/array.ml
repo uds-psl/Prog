@@ -27,7 +27,7 @@ let of_list l =
 
 let clone a =
   if Array.length a = 0 then [||]
-  else let b = Array.make (Array.length a) (a.(0)) in
+  else let b = Array.make (Array.length a) a.(0) in
     let rec loop i =
       if i < 0 then b else (b.(i) <- a.(i) ; loop (i-1))
     in loop (Array.length a - 1)

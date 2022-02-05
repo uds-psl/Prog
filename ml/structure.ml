@@ -186,8 +186,28 @@ let rec gettree a =
 
 let test = gettree (puttree (B(B(A,A),A)))
 
+(* Structure sharing *)
+
+let rec mtree n =
+  if n < 1 then A
+  else let t = mtree (n-1) in B(t,t)
+
 let rec putMtree n =
   if n < 1 then -1
   else let a = putMtree (n-1) in alloc' [a;a]
 
 let test = gettree (putMtree 2)
+
+let rec gettree' a =
+  if a = -1 then A
+  else let a1 = H.get a 0 in
+    let a2 = H.get a 1 in
+    let t1 = gettree' a1 in
+    if a1 = a2 then B(t1,t1)
+    else B(t1,gettree' a2)
+
+let t = gettree' (putMtree 3)
+let test = match t with
+  | A -> false
+  | B(t1,t2) -> t1 == t2 
+
