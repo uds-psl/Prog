@@ -157,7 +157,7 @@ let test4 = (a.(1) <- 1; a=b)     (* true *)
 
 let test = invalid_arg "1"  + invalid_arg "2"
 let test = (invalid_arg "1", invalid_arg "2")
-let test = (invalid_arg "1"; invalid_arg "2")
+let test = let _ = invalid_arg "1" in invalid_arg "2"
 
 (* Reference cells *)
 
